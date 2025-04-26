@@ -16,14 +16,17 @@ def index():
 @app.route('/tambah', methods=['POST'])
 def tambah():
     nama = request.form['nama'].strip()
-    markah = int(request.form['markah'])
+    markah_baru = int(request.form['markah'])
+
     # Pastikan nama tidak sensitif huruf besar kecil
     for universiti in senarai:
         if universiti['nama'].lower() == nama.lower():
-            universiti['markah'] = markah
+            universiti['markah'] += markah_baru  # <-- Tambah markah, bukan replace
             break
     else:
-        senarai.append({'nama': nama, 'markah': markah})
+        # Kalau universiti belum wujud, tambah baru
+        senarai.append({'nama': nama, 'markah': markah_baru})
+    
     return redirect(url_for('index'))
 
 # Edit universiti
@@ -33,7 +36,7 @@ def edit(nama):
         markah_baru = int(request.form['markah'])
         for universiti in senarai:
             if universiti['nama'].lower() == nama.lower():
-                universiti['markah'] = markah_baru
+                universiti['markah'] = markah_baru  # Kalau edit, replace dengan markah baru
                 break
         return redirect(url_for('index'))
     else:
@@ -58,5 +61,4 @@ def padam(nama):
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
-
+    app.run(debug=True, host='0.0.0.0')  # Penting host 0.0.0.0 untuk LocalTunnel
