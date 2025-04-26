@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Senarai Kedudukan Universiti</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            position: relative;
+        }
+
+        .menu-button {
+            border: none;
+            background: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+            width: 150px;
+            z-index: 1000;
+        }
+
+        .dropdown-menu button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .dropdown-menu button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .logo {
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            max-width: 120px;
+            height: auto;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .form-inline .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .form-inline input[type="text"],
+        .form-inline input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-inline button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .form-inline button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-bar">
+            <button class="menu-button" onclick="toggleDropdown()">⋮</button>
+            <div class="dropdown-menu" id="dropdown">
+                <button onclick="editUniversiti()">Edit Universiti</button>
+                <button onclick="padamUniversiti()">Padam Universiti</button>
+            </div>
+        </div>
+
+        <!-- LOGO -->
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Universiti">
+        </div>
+
+        <!-- TAJUK -->
+        <h1>Senarai Kedudukan Universiti</h1>
+
+        <!-- FORM -->
+        <form action="/tambah" method="POST" class="form-inline">
+            <div class="input-group">
+                <input type="text" name="nama" placeholder="Nama Universiti" required>
+                <input type="number" name="markah" placeholder="Markah" required>
+                <button type="submit">Tambah</button>
+            </div>
+        </form>
+
+        <!-- JADUAL -->
+        <table>
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Nama Universiti</th>
+                    <th>Markah</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for universiti in universiti_list %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ universiti['nama'] }}</td>
+                    <td>{{ universiti['markah'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function toggleDropdown() {
+            var dropdown = document.getElementById('dropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function editUniversiti() {
+            var nama = prompt("Masukkan nama universiti yang nak diedit:");
+            if (nama) {
+                window.location.href = "/edit/" + encodeURIComponent(nama);
+            }
+        }
+
+        function padamUniversiti() {
+            var nama = prompt("Masukkan nama universiti yang nak dipadam:");
+            if (nama) {
+                if (confirm("Anda pasti nak padam " + nama + "?")) {
+                    window.location.href = "/padam/" + encodeURIComponent(nama);
+                }
+            }
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.menu-button')) {
+                var dropdown = document.getElementById('dropdown');
+                if (dropdown.style.display === 'block') {
+                    dropdown.style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

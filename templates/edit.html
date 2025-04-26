@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Universiti</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            margin: 0; padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        form { display: flex; flex-direction: column; gap: 10px; }
+        input[type="text"], input[type="number"] {
+            padding: 8px; font-size: 16px;
+        }
+        input[type="submit"] {
+            padding: 8px 16px; background: #4caf50; color: #fff;
+            border: none; cursor: pointer; border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Edit Universiti</h1>
+    <form action="/edit/{{ universiti.nama }}" method="POST">
+        <input type="text" name="nama" value="{{ universiti.nama }}" required>
+        <input type="number" name="markah" value="{{ universiti.markah }}" required>
+        <input type="submit" value="Simpan">
+    </form>
+</div>
+</body>
+</html>
